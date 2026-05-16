@@ -14,13 +14,21 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt update
-          sudo apt install -y python3-pip python3-setuptools python3-wheel git zip unzip openjdk-17-jdk
+          sudo apt install -y \
+            python3-pip python3-setuptools python3-wheel \
+            git zip unzip openjdk-17-jdk \
+            libffi-dev libssl-dev liblzma-dev \
+            zlib1g-dev libjpeg-dev libpng-dev
 
       - name: Install buildozer
-        run: pip3 install buildozer cython
+        run: |
+          pip3 install --upgrade pip
+          pip3 install cython buildozer
 
       - name: Initialize buildozer
         run: buildozer init
 
       - name: Build APK
-        run: buildozer android debug
+        run: |
+          export PATH=$PATH:~/.buildozer/android/platform/android-sdk/tools/bin
+          buildozer android debug
